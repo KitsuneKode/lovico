@@ -1,18 +1,18 @@
 {
-  "name": "server",
+  "name": "@lovico/server",
   "module": "./src/server.ts",
   "type": "module",
   "private": true,
   "scripts": {
     "build": "tsdown",
     "check-types": "tsc -b",
-    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
-    "dev": "bun run --hot src/index.ts",
-    "start": "bun run dist/index.js",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/server.ts --outfile server",
+    "dev": "bun run --hot src/server.ts",
+    "start": "bun run dist/server.js",
     "lint": "bun run lint"
   },
   "devDependencies": {
-    "@template/typescript-config": "*",
+    "@lovico/typescript-config": "*",
     "@types/bun": "latest",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
@@ -22,11 +22,11 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@template/backend-common": "*",
-    "@template/common": "*",
-    "@template/auth": "*",
-    "@template/store": "*",
-    "@template/trpc": "*",
+    "@lovico/backend-common": "*",
+    "@lovico/common": "*",
+    "@lovico/auth": "*",
+    "@lovico/store": "*",
+    "@lovico/trpc": "*",
     "cors": "^2.8.5",
     "express": "^5.1.0"
   }

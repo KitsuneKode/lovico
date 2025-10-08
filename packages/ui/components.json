@@ -11,10 +11,10 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@template/ui/components",
-    "utils": "@template/ui/lib/utils",
-    "hooks": "@template/ui/hooks",
-    "lib": "@template/ui/lib",
-    "ui": "@template/ui/components"
+    "components": "@lovico/ui/components",
+    "utils": "@lovico/ui/lib/utils",
+    "hooks": "@lovico/ui/hooks",
+    "lib": "@lovico/ui/lib",
+    "ui": "@lovico/ui/components"
   }
 }

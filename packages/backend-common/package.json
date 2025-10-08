@@ -1,5 +1,5 @@
 {
-  "name": "@template/backend-common",
+  "name": "@lovico/backend-common",
   "version": "1.0.0",
   "description": "",
   "main": "./src/index.ts",
@@ -15,11 +15,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@template/typescript-config": "*",
+    "@lovico/typescript-config": "*",
     "@types/bun": "latest"
   },
   "dependencies": {
-    "@template/common": "*"
+    "@lovico/common": "*"
   },
   "peerDependencies": {
     "typescript": "^5"

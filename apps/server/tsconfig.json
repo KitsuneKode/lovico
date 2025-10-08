@@ -1,14 +1,14 @@
 {
-  "extends": "@template/typescript-config/backend.json",
+  "extends": "@lovico/typescript-config/backend.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@template/store": ["../../packages/store/src/*"],
-      "@template/auth": ["../../packages/auth/src/*"],
-      "@template/trpc": ["../../packages/trpc/src/*"],
-      "@template/backend-common": ["../../packages/trpc/backend-common/*"]
-    }
-    ,"outDir": "dist"
+      "@lovico/store/*": ["../../packages/store/src/*"],
+      "@lovico/auth/*": ["../../packages/auth/src/*"],
+      "@lovico/trpc/*": ["../../packages/trpc/src/*"],
+      "@lovico/backend-common/*": ["../../packages/trpc/backend-common/*"]
+    },
+    "outDir": "dist"
   }
 }

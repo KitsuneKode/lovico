@@ -1,5 +1,5 @@
 {
-  "name": "@template/store",
+  "name": "@lovico/store",
   "module": "src/index.ts",
   "type": "module",
   "private": true,
@@ -15,7 +15,7 @@
     ".": "./src/index.ts"
   },
   "devDependencies": {
-    "@template/typescript-config": "*",
+    "@lovico/typescript-config": "*",
     "@types/bun": "latest"
   },
   "peerDependencies": {

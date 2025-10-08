@@ -1,5 +1,5 @@
 {
-  "name": "@template/auth",
+  "name": "@lovico/auth",
   "module": "src/app.ts",
   "type": "module",
   "private": true,
@@ -8,14 +8,14 @@
     "./client": "./src/client.ts"
   },
   "devDependencies": {
-    "@template/typescript-config": "*",
+    "@lovico/typescript-config": "*",
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "@template/store": "*",
+    "@lovico/store": "*",
     "better-auth": "^1.2.12"
   }
 }
