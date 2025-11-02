@@ -1,3 +1,1 @@
-import { createLogger } from '@template/common/logger'
-
-export const logger = createLogger('lovico-client')
+export { clientLogger as logger } from '@lovico/common/client-logger'

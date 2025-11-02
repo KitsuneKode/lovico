@@ -1,15 +1,22 @@
 {
   "name": "@lovico/auth",
-  "module": "src/app.ts",
+  "module": "src/index.ts",
   "type": "module",
   "private": true,
   "exports": {
     "./server": "./src/index.ts",
     "./client": "./src/client.ts"
   },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0",
+    "lint:fix": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0 --fix"
+  },
   "devDependencies": {
     "@lovico/typescript-config": "*",
-    "@types/bun": "latest"
+    "@lovico/eslint-config": "*",
+    "@types/bun": "latest",
+    "eslint": "^9.39.0"
   },
   "peerDependencies": {
     "typescript": "^5"

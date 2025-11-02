@@ -6,14 +6,22 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["DATABASE_URL", "NODE_ENV"]
+      "env": [
+        "DATABASE_URL",
+        "NODE_ENV",
+        "ALLOWED_ORIGINS",
+        "FRONTEND_URL",
+        "BETTER_AUTH_SECRET",
+        "PORT",
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_API_URL",
+        "BETTER_AUTH_URL"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
-    },
+
     "dev": {
       "cache": false,
       "persistent": true
@@ -21,12 +29,29 @@
     "db:generate": {
       "cache": false
     },
-    "db:migrate:dev": {
+    "db:migrate": {
       "cache": false,
       "persistent": true
     },
-    "db:deploy": {
-      "cache": false
+    "db:reset": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "format": {
+      "dependsOn": ["^format"]
+    },
+    "format:check": {
+      "dependsOn": ["^format:check"]
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

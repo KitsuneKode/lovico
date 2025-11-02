@@ -1,27 +1,12 @@
-import os from 'os'
-import app from '@/app'
-import cluster from 'cluster'
-import config from '@/utils/config'
+import { NODE_ENV, PORT, config } from '@/utils/config'
 import { logger } from '@/utils/logger'
+import cluster from 'cluster'
+import app from '@/app'
+import os from 'os'
 
-try {
-  config.validate([
-    'jwtSecret',
-    'port',
-    'frontendUrl',
-    'databaseUrl',
-    'betterAuthSecret',
-    'betterAuthUrl',
-  ])
-} catch (error) {
-  logger.error('Configuration validation failed:', error)
-  process.exit(1)
-}
+config.validateAll()
 
-const port = config.getConfig('port')
-
-const numCPUs =
-  config.getConfig('nodeEnv') === 'development' ? 3 : os.cpus().length
+const numCPUs = NODE_ENV === 'development' ? 1 : os.cpus().length
 
 if (cluster.isPrimary) {
   logger.info(`Master process ${process.pid} is running`)
@@ -36,28 +21,24 @@ if (cluster.isPrimary) {
     cluster.fork()
   })
 } else {
-  const server = app.listen(port, (err) => {
+  const server = app.listen(PORT, (err) => {
     if (err) {
       logger.error(`Worker ${process.pid} failed to start server:`, err)
       process.exit(1)
     } else {
-      logger.info(`Worker ${process.pid} started server on port ${port}`)
+      logger.info(`Worker ${process.pid} started server on PORT ${PORT}`)
     }
   })
 
   const gracefulShutdown = () => {
-    console.log(
-      `Worker ${process.pid} received shutdown signal. Shutting down gracefully...`,
-    )
+    logger.info(`Worker ${process.pid} received shutdown signal. Shutting down gracefully...`)
     server.close(() => {
-      console.log(`Worker ${process.pid} closed.`)
+      logger.info(`Worker ${process.pid} closed.`)
       process.exit(0)
     })
 
     setTimeout(() => {
-      console.error(
-        `Worker ${process.pid} forced to exit after shutdown timeout.`,
-      )
+      logger.error(`Worker ${process.pid} forced to exit after shutdown timeout.`)
       process.exit(1)
     }, 10000)
   }

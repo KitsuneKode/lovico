@@ -1,7 +1,12 @@
 {
   "extends": "@lovico/typescript-config/backend.json",
   "compilerOptions": {
-    "types": ["bun"]
+    "baseUrl": ".",
+    "types": ["bun"],
+    "paths": {
+      "@lovico/trpc/*": ["./src/*"]
+    }
   },
-  "exclude": ["node_modules"]
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
 }

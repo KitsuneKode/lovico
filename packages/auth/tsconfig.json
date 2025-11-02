@@ -1,9 +1,3 @@
 {
-  "extends": "@lovico/typescript-config/backend.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  }
+  "extends": "@lovico/typescript-config/backend.json"
 }

@@ -1,10 +1,10 @@
 'use client'
 // ^-- to make sure we can mount the Provider from a server component
 import { useState } from 'react'
-import config from '@/utils/config'
-import { SuperJSON } from 'superjson'
-import type { AppRouter } from '@template/trpc'
+import superjson from 'superjson'
+import type { AppRouter } from '@lovico/trpc'
 import { makeQueryClient } from './query-client'
+import { API_URL, NODE_ENV } from '@/utils/config'
 import type { QueryClient } from '@tanstack/react-query'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
@@ -38,14 +38,14 @@ function getQueryClient() {
  * @returns The complete URL for the tRPC API endpoint.
  */
 function getUrl() {
-  const base = (() => {
-    // if (typeof window !== 'undefined') return ''
-    return config.getConfig('apiBaseUrl')
-  })()
-  return `${base}/api/trpc`
+  // const base = (() => {
+  //   // if (typeof window !== 'undefined') return ''
+  //   return API_URL
+  // })()
+  return `${API_URL}/api/trpc`
 }
 
-console.log(getUrl())
+// console.log(getUrl())
 
 /**
  * Provides tRPC and React Query contexts to descendant components.
@@ -71,11 +71,11 @@ export function TRPCReactProvider(
       links: [
         loggerLink({
           enabled: (op) =>
-            config.getConfig('nodeEnv') === 'development' ||
+            NODE_ENV === 'development' ||
             (op.direction === 'down' && op.result instanceof Error),
         }),
         httpBatchLink({
-          transformer: SuperJSON, //<-- if you use a data transformer
+          transformer: superjson, //<-- if you use a data transformer
           url: getUrl(),
           headers: () => {
             const headers = new Headers()

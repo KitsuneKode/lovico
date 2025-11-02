@@ -13,12 +13,19 @@
       "import": "./src/simple.ts"
     }
   },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0",
+    "lint:fix": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0 --fix"
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "@lovico/typescript-config": "*"
+    "@lovico/typescript-config": "*",
+    "@lovico/eslint-config": "*",
+    "eslint": "^9.39.0"
   },
   "peerDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5"
   },
   "dependencies": {
     "@lovico/auth": "*",

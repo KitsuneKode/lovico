@@ -1,28 +1,32 @@
 {
   "name": "@lovico/store",
-  "module": "src/index.ts",
+  "module": "./src/index.ts",
   "type": "module",
   "private": true,
   "scripts": {
     "db:generate": " prisma generate",
-    "db:migrate": " prisma migrate",
     "db:seed": "bun run src/scripts/seed.ts",
     "db:studio": " prisma studio",
-    "db:migrate:dev": "prisma migrate dev",
-    "db:deploy": " prisma deploy"
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
+    "check-types": "tsc --noEmit",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0 --ignore-pattern \"generated\"",
+    "lint:fix": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0 --fix --ignore-pattern \"generated\""
   },
   "exports": {
     ".": "./src/index.ts"
   },
   "devDependencies": {
     "@lovico/typescript-config": "*",
-    "@types/bun": "latest"
+    "@lovico/eslint-config": "*",
+    "@types/bun": "latest",
+    "eslint": "^9.39.0"
   },
   "peerDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5"
   },
   "dependencies": {
-    "@prisma/client": "^6.11.1",
-    "prisma": "^6.11.1"
+    "@prisma/client": "^6.17.0",
+    "prisma": "^6.17.0"
   }
 }

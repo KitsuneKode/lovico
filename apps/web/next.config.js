@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@template/ui'],
-};
+  transpilePackages: ['@lovico/ui'],
+}
 
-export default nextConfig;
+export default nextConfig

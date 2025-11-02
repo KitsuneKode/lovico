@@ -1,4 +1,4 @@
-# @template/common
+# @lovico/common
 
 To install dependencies:
 

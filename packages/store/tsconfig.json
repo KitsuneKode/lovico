@@ -1,9 +1,8 @@
 {
   "extends": "@lovico/typescript-config/backend.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@cu-forum/store/*": ["./src/*"]
+      "@lovico/store/*": ["./src/*"]
     }
   },
   "include": ["."],

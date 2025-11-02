@@ -1,22 +1,23 @@
 {
   "name": "@lovico/server",
-  "module": "./src/server.ts",
+  "module": "src/server.ts",
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "tsdown",
-    "check-types": "tsc -b",
-    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/server.ts --outfile server",
-    "dev": "bun run --hot src/server.ts",
+    "check-types": "tsc --noEmit",
+    "build": "bun build ./src/server.ts --outdir ./dist --target bun --minify --sourcemap --production",
+    "dev": "bun run --watch src/server.ts",
     "start": "bun run dist/server.js",
-    "lint": "bun run lint"
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0",
+    "lint:fix": "tsc --noEmit && eslint \"src/**/*.ts*\" --max-warnings 0 --fix"
   },
   "devDependencies": {
     "@lovico/typescript-config": "*",
     "@types/bun": "latest",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
-    "tsdown": "^0.15.4"
+    "eslint": "^9.39.0",
+    "@types/morgan": "^1.9.10"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -28,6 +29,8 @@
     "@lovico/store": "*",
     "@lovico/trpc": "*",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "helmet": "^8.1.0"
   }
 }

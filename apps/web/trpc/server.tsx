@@ -1,12 +1,12 @@
 import 'server-only' // <-- ensure this file cannot be imported from the client
-import config from '@/utils/config'
+import superjson from 'superjson'
 import React, { cache } from 'react'
-import { SuperJSON } from 'superjson'
 import { headers } from 'next/headers'
-import { auth } from '@template/auth/server'
-import { createCaller } from '@template/trpc'
-import { prisma as db } from '@template/store'
-import type { AppRouter } from '@template/trpc'
+import { API_URL } from '@/utils/config'
+import { auth } from '@lovico/auth/server'
+import { createCaller } from '@lovico/trpc'
+import { prisma as db } from '@lovico/store'
+import type { AppRouter } from '@lovico/trpc'
 import { makeQueryClient } from './query-client'
 import { createTRPCClient, httpLink } from '@trpc/client'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
@@ -25,16 +25,16 @@ export const trpcCaller = cache(async () => {
 })
 
 function getUrl() {
-  const base = (() => {
-    // if (typeof window !== 'undefined') return ''
-    return config.getConfig('apiBaseUrl')
-  })()
-  return `${base}/api/trpc`
+  // const base = (() => {
+  //   // if (typeof window !== 'undefined') return ''
+  //   return config.getConfig('apiBaseUrl')
+  // })()
+  return `${API_URL}/api/trpc`
 }
 
 export const trpc = createTRPCOptionsProxy({
   client: createTRPCClient<AppRouter>({
-    links: [httpLink({ url: getUrl(), transformer: SuperJSON })],
+    links: [httpLink({ url: getUrl(), transformer: superjson })],
   }),
   queryClient: getQueryClient,
 })

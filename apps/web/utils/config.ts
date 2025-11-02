@@ -1,23 +1,8 @@
-import { ConfigLoader } from '@template/common/config-loader'
+import { clientConfig as config } from '@lovico/common/config'
 
-const clientConfigSchema = {
-  frontendUrl: () => process.env.NEXT_PUBLIC_APP_URL || '',
-  apiBaseUrl: () => process.env.NEXT_PUBLIC_API_URL || '',
-  jwtSecret: () => process.env.JWT_SECRET || '',
-  databaseUrl: () => process.env.DATABASE_URL || '',
-  nodeEnv: () => process.env.NODE_ENV || 'development',
-}
+export { config }
+config.validateAll()
 
-const config = ConfigLoader.getInstance(clientConfigSchema, 'client')
-
-config.validate([
-  'frontendUrl',
-  'apiBaseUrl',
-  'jwtSecret',
-  'databaseUrl',
-  'nodeEnv',
-])
-
-console.log('Configuration loaded:', config.getConfig('apiBaseUrl'))
-
-export default config
+export const APP_URL = config.getConfig('appUrl')
+export const API_URL = config.getConfig('apiBaseUrl')
+export const NODE_ENV = config.getConfig('nodeEnv')

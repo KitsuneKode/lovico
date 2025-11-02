@@ -39,4 +39,5 @@ yarn-error.log*
 
 
 # Logs
-logs/
+logs
+generated
