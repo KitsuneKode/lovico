@@ -80,3 +80,5 @@ export const clientConfig = ConfigLoader.getInstance(
   clientLogger,
   true,
 )
+
+export const APP_URL = clientConfig.getConfig('appUrl')

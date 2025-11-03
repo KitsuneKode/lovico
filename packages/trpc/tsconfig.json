@@ -2,7 +2,6 @@
   "extends": "@lovico/typescript-config/backend.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "types": ["bun"],
     "paths": {
       "@lovico/trpc/*": ["./src/*"]
     }

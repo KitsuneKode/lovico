@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.17.0",
+    "geist": "^1.5.1",
     "prisma": "^6.17.0"
   }
 }

@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@lovico/store": "*",
+    "@lovico/common": "*",
     "better-auth": "^1.2.12"
   }
 }

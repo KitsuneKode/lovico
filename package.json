@@ -24,12 +24,11 @@
   "devDependencies": {
     "@lovico/eslint-config": "*",
     "@lovico/typescript-config": "*",
-    "@types/minimatch": "^6.0.0",
     "eslint": "^9.39.0",
+    "@types/minimatch": "^6.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "prettier-plugin-sort-imports": "^1.8.8",
-    "prettier-plugin-tailwindcss": "^0.7.1",
     "prettier": "^3.6.2",
     "turbo": "^2.6.0",
     "typescript": "5.9.3"
@@ -43,5 +42,12 @@
     "packages/*",
     "tooling/*",
     "tests/*"
-  ]
+  ],
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "ogl": "^1.0.11",
+    "react-hook-form": "^7.66.0",
+    "react-syntax-highlighter": "^16.1.0"
+  }
 }

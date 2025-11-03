@@ -27,6 +27,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  projects      Project[]
 
   @@unique([email])
   @@map("user")
@@ -75,4 +76,37 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Project {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  thumbnail   String?
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generations Generation[]
+  isPublic    Boolean      @default(false)
+  isFeatured  Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([isFeatured])
+  @@map("project")
+}
+
+model Generation {
+  id         String   @id @default(cuid())
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  prompt     String   @db.Text
+  html       String   @db.Text
+  css        String?  @db.Text
+  javascript String?  @db.Text
+  files      Json?
+  createdAt  DateTime @default(now())
+
+  @@index([projectId])
+  @@map("generation")
 }
