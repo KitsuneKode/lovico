@@ -1,12 +1,9 @@
-import z from 'zod'
-import { initTRPC } from '@trpc/server'
-import * as trpcExpress from '@trpc/server/adapters/express'
 import { createExpressMiddleware } from '@trpc/server/adapters/express'
+import * as trpcExpress from '@trpc/server/adapters/express'
+import { initTRPC } from '@trpc/server'
+import z from 'zod'
 
-const createTRPCContext = async ({
-  req,
-  res,
-}: trpcExpress.CreateExpressContextOptions) => {
+const createTRPCContext = async ({ req, res }: trpcExpress.CreateExpressContextOptions) => {
   return { userId: 'user_123' }
 }
 // Avoid exporting the entire t-object

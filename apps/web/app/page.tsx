@@ -4,6 +4,7 @@ import LightRays from '@/components/LightRays'
 import { HeroHeader } from '@/components/header'
 import { HallOfFame } from '@/components/hall-of-fame'
 import { AnimatedHero } from '@/components/AnimatedHero'
+import { FloatingChat } from '@/components/floating-chat'
 import { ProjectGallery } from '@/components/project-gallery'
 import { TextEffect } from '@lovico/ui/components/text-effect'
 import { AnimatedGroup } from '@lovico/ui/components/animated-group'
@@ -68,6 +69,11 @@ export default async function Home() {
             </p>
           </div>
         </section>
+
+        {/* Floating chat input for homepage */}
+        <div className="pointer-events-none fixed inset-x-0 bottom-8 z-50 mx-auto w-full max-w-2xl px-4">
+          <FloatingChat />
+        </div>
       </main>
     </>
   )

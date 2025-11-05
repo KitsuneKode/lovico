@@ -7,12 +7,12 @@ export default {
   '(apps|packages)/**/*.{js,ts,jsx,tsx}': (files) => {
     // Group files by their config path
     const filesByConfig = files.reduce((acc, file) => {
-      let configPath = './eslint.config.js' // default
+      let configPath = './eslint.config.mjs' // default
 
       if (file.startsWith('apps/web/')) {
-        configPath = './apps/web/eslint.config.js'
+        configPath = './apps/web/eslint.config.mjs'
       } else if (file.startsWith('packages/ui/')) {
-        configPath = './packages/ui/eslint.config.js'
+        configPath = './packages/ui/eslint.config.mjs'
       }
       // Add more conditions as needed
 
