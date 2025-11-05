@@ -3,347 +3,220 @@
 import { useState } from 'react'
 import { cn } from '@lovico/ui/lib/utils'
 import { dummyProjects } from '@/lib/dummy-data'
-import { CodeViewer } from '@/components/code-viewer'
+import { FileTree } from '@/components/code-viewer/file-tree'
+import { CodeViewer, EmptyCodeViewer } from '@/components/code-viewer/code-viewer'
+import { ChatPanel } from '@/components/chat/chat-panel'
 import { Button } from '@lovico/ui/components/button'
-import { Skeleton } from '@lovico/ui/components/skeleton'
-import { ScrollArea } from '@lovico/ui/components/scroll-area'
-import { PromptInput } from '@/components/ai-elements/prompt-input'
-import { Tabs, TabsList, TabsTrigger } from '@lovico/ui/components/tabs'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@lovico/ui/components/resizable'
-import {
-  Code2,
-  Globe,
-  Download,
-  Share2,
-  RotateCw,
-  ChevronLeft,
-  ChevronRight,
-  Play,
-  Sparkles,
-} from 'lucide-react'
-import {
-  WebPreview,
-  WebPreviewNavigation,
-  WebPreviewNavigationButton,
-  WebPreviewUrl,
-  WebPreviewBody,
-  WebPreviewConsole,
-} from '@/components/ai-elements/web-preview'
+import { Globe, Code2, Settings, Zap } from 'lucide-react'
+import type { FileNode } from '@lovico/common'
 
 interface DashboardClientProps {
   projectId: string
 }
 
 export function DashboardClient({ projectId }: DashboardClientProps) {
-  const [viewMode, setViewMode] = useState<'preview' | 'code'>('preview')
-  const [messages, setMessages] = useState<
-    Array<{ role: 'user' | 'assistant'; content: string }>
-  >([
-    {
-      role: 'assistant',
-      content:
-        "👋 Hi! I'm here to help you build your website. What would you like to create or modify?",
-    },
-  ])
-  const [generatedUrl, setGeneratedUrl] = useState('')
+  const [viewMode, setViewMode] = useState<'preview' | 'code'>('code')
+  const [selectedFile, setSelectedFile] = useState<FileNode | null>(null)
 
   // Use dummy data for now (replace with tRPC when database is seeded)
   const project = dummyProjects.find((p) => p.id === projectId)
-  const isLoadingProject = false
 
-  const handlePromptSubmit = async (prompt: string, attachments: File[]) => {
-    // Add user message
-    setMessages((prev) => [...prev, { role: 'user', content: prompt }])
-
-    // Simulate AI response (replace with actual AI integration)
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
+  // TODO: Replace with real file tree from tRPC
+  // const { data: fileTree } = trpc.file.getTree.useQuery({ projectId })
+  const mockFiles: FileNode[] = [
+    {
+      id: '1',
+      name: 'appointment-booking',
+      type: 'directory',
+      path: 'appointment-booking',
+      isExpanded: true,
+      children: [
         {
-          role: 'assistant',
-          content:
-            "I'll create that for you! Here's a preview of your website...",
+          id: '2',
+          name: 'src',
+          type: 'directory',
+          path: 'appointment-booking/src',
+          isExpanded: true,
+          children: [
+            {
+              id: '3',
+              name: 'app',
+              type: 'directory',
+              path: 'appointment-booking/src/app',
+              children: [
+                {
+                  id: '4',
+                  name: 'layout.tsx',
+                  type: 'file',
+                  path: 'appointment-booking/src/app/layout.tsx',
+                  language: 'tsx',
+                  content: `import type { Metadata } from 'next'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Appointment Booking',
+  description: 'Book appointments easily',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}`,
+                },
+                {
+                  id: '5',
+                  name: 'page.tsx',
+                  type: 'file',
+                  path: 'appointment-booking/src/app/page.tsx',
+                  language: 'tsx',
+                  content: `export default function Home() {
+  return (
+    <main className="min-h-screen p-8">
+      <h1 className="text-4xl font-bold">Appointment Booking</h1>
+      <p className="mt-4">Book your appointments easily</p>
+    </main>
+  )
+}`,
+                },
+              ],
+            },
+          ],
         },
-      ])
-    }, 1000)
+        {
+          id: '6',
+          name: 'package.json',
+          type: 'file',
+          path: 'appointment-booking/package.json',
+          language: 'json',
+          content: `{
+  "name": "appointment-booking",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
+}`,
+        },
+      ],
+    },
+  ]
 
   return (
-    <>
-      {/* Top Bar */}
-      <header className="bg-card flex h-16 items-center justify-between border-b px-6">
+    <div className="h-full flex flex-col">
+      {/* Top Bar - same.dev style */}
+      <header className="h-14 flex items-center justify-between px-4 border-b border-white/5 bg-[#0a0a0a]">
         <div className="flex items-center gap-4">
-          {isLoadingProject ? (
-            <Skeleton className="h-6 w-48" />
-          ) : (
-            <>
-              <h1 className="text-lg font-semibold">
-                {project?.name || 'Untitled Project'}
-              </h1>
-              {project?.description && (
-                <span className="text-muted-foreground text-sm">
-                  {project.description}
-                </span>
+          <h1 className="text-sm font-medium text-white">
+            {project?.name || 'Untitled Project'}
+          </h1>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode('preview')}
+              className={cn(
+                'px-3 py-1 text-xs rounded transition-colors',
+                viewMode === 'preview'
+                  ? 'bg-white/10 text-white'
+                  : 'text-neutral-400 hover:text-white'
               )}
-            </>
-          )}
+            >
+              <Globe className="inline h-3 w-3 mr-1" />
+              Preview
+            </button>
+            <button
+              onClick={() => setViewMode('code')}
+              className={cn(
+                'px-3 py-1 text-xs rounded transition-colors',
+                viewMode === 'code'
+                  ? 'bg-white/10 text-white'
+                  : 'text-neutral-400 hover:text-white'
+              )}
+            >
+              <Code2 className="inline h-3 w-3 mr-1" />
+              Code
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Share2 className="size-4" />
-            Share
+          <Button
+            size="sm"
+            className="h-7 px-3 text-xs bg-blue-600 hover:bg-blue-700"
+          >
+            <Zap className="h-3 w-3 mr-1" />
+            Pro
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Download className="size-4" />
-            Export
-          </Button>
-          <Button size="sm" className="gap-2">
-            <Play className="size-4" />
-            Deploy
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-neutral-400 hover:text-white"
+          >
+            <Settings className="h-3.5 w-3.5" />
           </Button>
         </div>
       </header>
 
-      {/* Resizable Panels */}
+      {/* Three-Panel Layout - same.dev style */}
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Panel - Preview/Code */}
-        <ResizablePanel defaultSize={60} minSize={30}>
-          <div className="flex h-full flex-col">
-            {/* View Mode Tabs */}
-            <div className="bg-muted/30 flex items-center justify-between border-b px-4 py-2">
-              <Tabs
-                value={viewMode}
-                onValueChange={(v) => setViewMode(v as 'preview' | 'code')}
-              >
-                <TabsList>
-                  <TabsTrigger value="preview" className="gap-2">
-                    <Globe className="size-4" />
-                    Preview
-                  </TabsTrigger>
-                  <TabsTrigger value="code" className="gap-2">
-                    <Code2 className="size-4" />
-                    Code
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+        {/* File Tree Panel */}
+        {viewMode === 'code' && (
+          <>
+            <ResizablePanel defaultSize={18} minSize={15} maxSize={25}>
+              <FileTree
+                files={mockFiles}
+                selectedFile={selectedFile}
+                onFileSelect={setSelectedFile}
+              />
+            </ResizablePanel>
 
-              {viewMode === 'preview' && (
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm">
-                    <RotateCw className="size-4" />
-                  </Button>
-                </div>
-              )}
-            </div>
+            <ResizableHandle className="w-px bg-white/5" />
+          </>
+        )}
 
-            {/* Content Area */}
-            <div className="flex-1 overflow-hidden">
-              {isLoadingProject ? (
-                <div className="flex h-full items-center justify-center">
-                  <div className="text-center">
-                    <Skeleton className="mx-auto mb-4 h-12 w-12 rounded-full" />
-                    <Skeleton className="h-4 w-48" />
-                  </div>
-                </div>
-              ) : viewMode === 'preview' ? (
-                <WebPreview
-                  defaultUrl={generatedUrl || 'about:blank'}
-                  className="h-full"
-                >
-                  <WebPreviewNavigation>
-                    <WebPreviewNavigationButton tooltip="Back">
-                      <ChevronLeft className="size-4" />
-                    </WebPreviewNavigationButton>
-                    <WebPreviewNavigationButton tooltip="Forward">
-                      <ChevronRight className="size-4" />
-                    </WebPreviewNavigationButton>
-                    <WebPreviewNavigationButton tooltip="Reload">
-                      <RotateCw className="size-4" />
-                    </WebPreviewNavigationButton>
-                    <WebPreviewUrl />
-                  </WebPreviewNavigation>
-
-                  <WebPreviewBody />
-
-                  <WebPreviewConsole
-                    logs={[
-                      {
-                        level: 'log',
-                        message: 'Website loaded successfully',
-                        timestamp: new Date(),
-                      },
-                    ]}
-                  />
-                </WebPreview>
-              ) : (
-                <CodeViewer
-                  files={[
-                    {
-                      name: 'index.html',
-                      content: `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${project?.name || 'My Website'}</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to ${project?.name || 'My Website'}</h1>
-        <p>This is a beautiful website generated by AI!</p>
-        <p>Start chatting with the AI to modify and enhance your website.</p>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>`,
-                      language: 'html',
-                    },
-                    {
-                      name: 'styles.css',
-                      content: `* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-}
-
-.container {
-  background: white;
-  padding: 3rem;
-  border-radius: 1rem;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  text-align: center;
-  max-width: 600px;
-}
-
-h1 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 2.5rem;
-}
-
-p {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 0.5rem;
-}`,
-                      language: 'css',
-                    },
-                    {
-                      name: 'script.js',
-                      content: `console.log('Website loaded successfully!');
-
-// Add interactive functionality here
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM fully loaded and parsed');
-
-  // Example: Add animation on load
-  const container = document.querySelector('.container');
-  if (container) {
-    container.style.animation = 'fadeIn 0.5s ease-in';
-  }
-});
-
-// Example animation keyframes (would normally be in CSS)
-const style = document.createElement('style');
-style.textContent = \`
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-\`;
-document.head.appendChild(style);`,
-                      language: 'javascript',
-                    },
-                  ]}
-                />
-              )}
-            </div>
-          </div>
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        {/* Right Panel - Chat */}
-        <ResizablePanel defaultSize={40} minSize={25}>
-          <div className="bg-muted/20 flex h-full flex-col">
-            {/* Chat Header */}
-            <div className="bg-card flex items-center gap-3 border-b px-6 py-4">
-              <div className="from-primary to-primary/70 flex size-10 items-center justify-center rounded-full bg-gradient-to-br">
-                <Sparkles className="text-primary-foreground size-5" />
-              </div>
-              <div>
-                <h2 className="font-semibold">AI Assistant</h2>
-                <p className="text-muted-foreground text-xs">
-                  Describe changes or ask questions
+        {/* Preview/Code Panel */}
+        <ResizablePanel defaultSize={viewMode === 'code' ? 52 : 70} minSize={35}>
+          {viewMode === 'preview' ? (
+            <div className="h-full flex items-center justify-center bg-white">
+              <div className="text-center p-8">
+                <Globe className="h-12 w-12 mx-auto text-neutral-400 mb-4" />
+                <p className="text-sm text-neutral-600">Preview coming soon</p>
+                <p className="text-xs text-neutral-400 mt-2">
+                  Generated website will appear here
                 </p>
               </div>
             </div>
+          ) : selectedFile ? (
+            <CodeViewer file={selectedFile} />
+          ) : (
+            <EmptyCodeViewer message="Select a file to preview" />
+          )}
+        </ResizablePanel>
 
-            {/* Messages */}
-            <ScrollArea className="flex-1 p-6">
-              <div className="space-y-6">
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      'flex gap-3',
-                      message.role === 'user' ? 'justify-end' : 'justify-start',
-                    )}
-                  >
-                    {message.role === 'assistant' && (
-                      <div className="from-primary to-primary/70 flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br">
-                        <Sparkles className="text-primary-foreground size-4" />
-                      </div>
-                    )}
-                    <div
-                      className={cn(
-                        'max-w-[80%] rounded-2xl px-4 py-3',
-                        message.role === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-card border',
-                      )}
-                    >
-                      <p className="text-sm leading-relaxed">
-                        {message.content}
-                      </p>
-                    </div>
-                    {message.role === 'user' && (
-                      <div className="bg-muted flex size-8 flex-shrink-0 items-center justify-center rounded-full">
-                        <span className="text-xs font-semibold">You</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
+        <ResizableHandle className="w-px bg-white/5" />
 
-            {/* Input */}
-            <div className="bg-card border-t p-4">
-              <PromptInput
-                onSubmit={handlePromptSubmit}
-                placeholder="Describe what you want to build or modify..."
-                className="w-full"
-              />
-            </div>
-          </div>
+        {/* Chat Panel */}
+        <ResizablePanel defaultSize={30} minSize={25} maxSize={40}>
+          <ChatPanel projectId={projectId} projectName={project?.name} />
         </ResizablePanel>
       </ResizablePanelGroup>
-    </>
+    </div>
   )
 }
