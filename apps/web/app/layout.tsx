@@ -2,9 +2,10 @@ import '@lovico/ui/globals.css'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 
+import { Metadata } from 'next'
 import { Providers } from '@/components/providers'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Lovico - Build Websites with AI',
   description: 'Create stunning websites in seconds with the power of AI',
 }
@@ -24,8 +25,8 @@ export default function RootLayout({
     >
       <body className={`font-sans antialiased`}>
         <Providers>
-          {children}
           {modal}
+          {children}
         </Providers>
       </body>
     </html>

@@ -1,7 +1,7 @@
 'use client'
 
 import { z } from 'zod'
-import { useState } from 'react'
+import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { cn } from '@lovico/ui/lib/utils'
@@ -10,23 +10,27 @@ import { authClient } from '@lovico/auth/client'
 import { Input } from '@lovico/ui/components/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lovico/ui/components/button'
+import { FieldGroup, FieldSeparator } from '@lovico/ui/components/field'
 import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from '@lovico/ui/components/field'
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@lovico/ui/components/form'
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  mode: z.literal('login'),
+  email: z.email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
 })
 
 const signupSchema = z
   .object({
+    mode: z.literal('signup'),
     name: z.string().min(2, 'Name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
+    email: z.email('Invalid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string(),
   })
@@ -35,15 +39,16 @@ const signupSchema = z
     path: ['confirmPassword'],
   })
 
-type LoginFormData = z.infer<typeof loginSchema>
-type SignupFormData = z.infer<typeof signupSchema>
-
 interface AuthFormProps {
   mode: 'login' | 'signup'
   onSuccess?: () => void
   onToggle?: () => void
   className?: string
 }
+
+const schema = z.discriminatedUnion('mode', [signupSchema, loginSchema])
+
+type Schema = z.infer<typeof schema>
 
 export function AuthForm({
   mode,
@@ -52,41 +57,38 @@ export function AuthForm({
   className,
 }: AuthFormProps) {
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-
   const isLogin = mode === 'login'
-  const schema = isLogin ? loginSchema : signupSchema
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<any>({
+  const form = useForm<Schema>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      mode,
+      ...(mode === 'login' ? {} : { name: '', confirmPassword: '' }),
+      email: '',
+      password: '',
+    },
   })
 
-  const onSubmit = async (data: LoginFormData | SignupFormData) => {
-    setError(null)
-    setIsLoading(true)
+  const isLoading = form.formState.isSubmitting
 
+  const onSubmit = async (data: Schema) => {
     try {
-      if (isLogin) {
-        const { email, password } = data as LoginFormData
+      if (data.mode === 'login') {
+        const { email, password } = data
         const result = await authClient.signIn.email({
           email,
           password,
         })
 
         if (result.error) {
-          setError(result.error.message || 'Invalid credentials')
+          // Error handling will be done by authClient
           return
         }
 
         onSuccess?.()
         router.refresh()
       } else {
-        const { name, email, password } = data as SignupFormData
+        const { name, email, password } = data
         const result = await authClient.signUp.email({
           name,
           email,
@@ -94,7 +96,7 @@ export function AuthForm({
         })
 
         if (result.error) {
-          setError(result.error.message || 'Failed to create account')
+          // Error handling will be done by authClient
           return
         }
 
@@ -104,158 +106,170 @@ export function AuthForm({
         router.refresh()
       }
     } catch (err) {
-      setError('An unexpected error occurred')
       console.error(err)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   return (
-    <form
-      className={cn('flex flex-col gap-6', className)}
-      onSubmit={handleSubmit(onSubmit as any)}
-    >
-      <FieldGroup>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold">
-            {isLogin ? 'Welcome back' : 'Create your account'}
-          </h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            {isLogin
-              ? 'Enter your credentials to sign in'
-              : 'Fill in the form below to get started'}
-          </p>
-        </div>
-
-        {error && (
-          <div className="bg-destructive/10 text-destructive rounded-md p-3 text-center text-sm">
-            {error}
+    <Form {...form}>
+      <form
+        className={cn('flex flex-col gap-6', className)}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FieldGroup>
+          <div className="flex flex-col items-center gap-1 text-center">
+            <h1 className="text-2xl font-bold">
+              {isLogin ? 'Welcome back' : 'Create your account'}
+            </h1>
+            <p className="text-muted-foreground text-sm text-balance">
+              {isLogin
+                ? 'Enter your credentials to sign in'
+                : 'Fill in the form below to get started'}
+            </p>
           </div>
-        )}
 
-        {!isLogin && (
-          <Field>
-            <FieldLabel htmlFor="name">Full Name</FieldLabel>
-            <Input
-              id="name"
-              type="text"
-              placeholder="John Doe"
-              {...register('name')}
-              disabled={isLoading}
+          {!isLogin && (
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="John Doe"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.name && (
-              <FieldDescription className="text-destructive">
-                {errors.name.message as string}
-              </FieldDescription>
-            )}
-          </Field>
-        )}
-
-        <Field>
-          <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-            {...register('email')}
-            disabled={isLoading}
-          />
-          {errors.email && (
-            <FieldDescription className="text-destructive">
-              {errors.email.message as string}
-            </FieldDescription>
           )}
-        </Field>
 
-        <Field>
-          <div className="flex items-center">
-            <FieldLabel htmlFor="password">Password</FieldLabel>
-            {isLogin && (
-              <a
-                href="#"
-                className="ml-auto text-sm underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </a>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="m@example.com"
+                    disabled={isLoading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center">
+                  <FormLabel>Password</FormLabel>
+                  {isLogin && (
+                    <Link
+                      href="#"
+                      className="ml-auto text-sm underline-offset-4 hover:underline"
+                    >
+                      Forgot your password?
+                    </Link>
+                  )}
+                </div>
+                <FormControl>
+                  <Input
+                    type="password"
+                    disabled={isLoading}
+                    placeholder="Password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {!isLogin && (
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" disabled={isLoading} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {/* Hidden input for mode field */}
+          <input type="hidden" {...form.register('mode')} />
+
+          <div>
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                  {isLogin ? 'Signing in...' : 'Creating account...'}
+                </>
+              ) : isLogin ? (
+                'Sign in'
+              ) : (
+                'Create account'
+              )}
+            </Button>
           </div>
-          <Input
-            id="password"
-            type="password"
-            {...register('password')}
-            disabled={isLoading}
-          />
-          {errors.password && (
-            <FieldDescription className="text-destructive">
-              {errors.password.message as string}
-            </FieldDescription>
-          )}
-        </Field>
 
-        {!isLogin && (
-          <Field>
-            <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
-            <Input
-              id="confirmPassword"
-              type="password"
-              {...register('confirmPassword')}
-              disabled={isLoading}
-            />
-            {errors.confirmPassword && (
-              <FieldDescription className="text-destructive">
-                {errors.confirmPassword.message as string}
-              </FieldDescription>
-            )}
-          </Field>
-        )}
+          <FieldSeparator>Or continue with</FieldSeparator>
 
-        <Field>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
-                {isLogin ? 'Signing in...' : 'Creating account...'}
-              </>
-            ) : isLogin ? (
-              'Sign in'
-            ) : (
-              'Create account'
-            )}
-          </Button>
-        </Field>
-
-        <FieldSeparator>Or continue with</FieldSeparator>
-
-        <Field>
-          <Button variant="outline" type="button" disabled={isLoading}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="size-4"
-            >
-              <path
-                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-                fill="currentColor"
-              />
-            </svg>
-            <span className="ml-2">
-              {isLogin ? 'Sign in' : 'Sign up'} with GitHub
-            </span>
-          </Button>
-
-          <FieldDescription className="text-center">
-            {isLogin ? "Don't have an account? " : 'Already have an account? '}
-            <button
+          <div className="flex flex-col gap-2">
+            <Button
+              variant="outline"
               type="button"
-              onClick={onToggle}
-              className="hover:text-primary underline underline-offset-4"
+              disabled={isLoading}
+              className="w-full"
             >
-              {isLogin ? 'Sign up' : 'Sign in'}
-            </button>
-          </FieldDescription>
-        </Field>
-      </FieldGroup>
-    </form>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="size-4"
+              >
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                  fill="currentColor"
+                />
+              </svg>
+              <span className="ml-2">
+                {isLogin ? 'Sign in' : 'Sign up'} with GitHub
+              </span>
+            </Button>
+
+            <p className="text-muted-foreground text-center text-sm">
+              {isLogin
+                ? "Don't have an account? "
+                : 'Already have an account? '}
+              <button
+                type="button"
+                onClick={onToggle}
+                className="hover:text-primary underline underline-offset-4"
+              >
+                {isLogin ? 'Sign up' : 'Sign in'}
+              </button>
+            </p>
+          </div>
+        </FieldGroup>
+      </form>
+    </Form>
   )
 }
