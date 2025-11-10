@@ -56,7 +56,7 @@ export function CodeViewer({ files, className }: CodeViewerProps) {
   return (
     <div className={cn('flex h-full overflow-hidden', className)}>
       {/* File Tree Sidebar */}
-      <div className="bg-muted/20 w-64 flex-shrink-0 border-r">
+      <div className="bg-muted/20 w-64 shrink-0 border-r">
         <div className="bg-muted/50 border-b px-4 py-3">
           <h3 className="text-sm font-semibold">Files</h3>
         </div>

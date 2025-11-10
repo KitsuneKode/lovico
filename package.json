@@ -24,7 +24,7 @@
   "devDependencies": {
     "@lovico/eslint-config": "*",
     "@lovico/typescript-config": "*",
-    "eslint": "^9.39.0",
+    "eslint": "^9.39.1",
     "@types/minimatch": "^6.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",

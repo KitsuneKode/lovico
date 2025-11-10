@@ -16,7 +16,7 @@
     "@lovico/typescript-config": "*",
     "@lovico/eslint-config": "*",
     "@types/bun": "latest",
-    "eslint": "^9.39.0"
+    "eslint": "^9.39.1"
   },
   "peerDependencies": {
     "typescript": "^5"

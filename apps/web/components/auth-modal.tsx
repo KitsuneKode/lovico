@@ -16,10 +16,6 @@ export function AuthModal({ mode }: AuthModalProps) {
     router.back()
   }
 
-  const handleSuccess = () => {
-    router.push('/dashboard')
-  }
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
@@ -38,7 +34,7 @@ export function AuthModal({ mode }: AuthModalProps) {
           <X className="size-4" />
         </Button>
 
-        <AuthForm mode={mode} onSuccess={handleSuccess} />
+        <AuthForm mode={mode} />
       </div>
     </div>
   )

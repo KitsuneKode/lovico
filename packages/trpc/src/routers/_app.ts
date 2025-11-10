@@ -1,4 +1,4 @@
-import { createTRPCRouter, publicProcedure } from '../trpc'
+import { createTRPCRouter, publicProcedure } from '@/trpc'
 import { projectRouter } from './project'
 import { userRouter } from './user'
 import { authRouter } from './auth'

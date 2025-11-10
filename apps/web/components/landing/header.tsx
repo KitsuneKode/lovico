@@ -1,9 +1,8 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
-import { Logo } from '@/components/logo'
 import { cn } from '@lovico/ui/lib/utils'
+import { Menu, PaintRoller, X } from 'lucide-react'
 import { Button } from '@lovico/ui/components/button'
 
 const menuItems = [
@@ -44,7 +43,7 @@ export const HeroHeader = () => {
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
-                <Logo />
+                <PaintRoller />
               </Link>
 
               <button

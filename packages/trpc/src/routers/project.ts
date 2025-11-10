@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { protectedProcedure, publicProcedure } from '@/trpc'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { prisma as db } from '@lovico/store'
 import { z } from 'zod'
@@ -116,7 +116,7 @@ export const projectRouter = {
       }
 
       return db.project.update({
-        where: { id },
+        where: { id, userId: ctx.session.user.id },
         data,
       })
     }),

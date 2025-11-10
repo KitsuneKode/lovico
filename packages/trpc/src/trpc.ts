@@ -2,11 +2,11 @@ import * as trpcExpress from '@trpc/server/adapters/express'
 import { auth, fromNodeHeaders } from '@lovico/auth/server'
 import { initTRPC, TRPCError } from '@trpc/server'
 import { prisma as db } from '@lovico/store'
-import { logger } from './utils/logger'
+import { logger } from '@/utils/logger'
 import { z, ZodError } from 'zod/v4'
 import superjson from 'superjson'
 
-export const createTRPCContext = async ({ req, res }: trpcExpress.CreateExpressContextOptions) => {
+export const createTRPCContext = async ({ req }: trpcExpress.CreateExpressContextOptions) => {
   const headers = fromNodeHeaders(req.headers)
 
   const session = await auth.api.getSession({

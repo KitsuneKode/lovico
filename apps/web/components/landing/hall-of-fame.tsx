@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'motion/react'
 import { Star, User } from 'lucide-react'
 import { cn } from '@lovico/ui/lib/utils'
@@ -78,7 +79,9 @@ export function HallOfFame({ projects, className }: HallOfFameProps) {
 
                 <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
                   {project.user.image ? (
-                    <img
+                    <Image
+                      width={20}
+                      height={20}
                       src={project.user.image}
                       alt={project.user.name}
                       className="size-5 rounded-full"

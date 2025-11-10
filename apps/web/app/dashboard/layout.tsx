@@ -70,9 +70,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar placeholder (enhanced sidebar can plug in here) */}
-      <aside className="border-border/50 bg-background/50 sticky top-0 hidden w-64 shrink-0 border-r p-4 backdrop-blur lg:block">
-        {/* Add nav items here */}
-      </aside>
       <main className="flex-1">{children}</main>
     </div>
   )

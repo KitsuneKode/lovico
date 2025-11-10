@@ -41,8 +41,6 @@ const signupSchema = z
 
 interface AuthFormProps {
   mode: 'login' | 'signup'
-  onSuccess?: () => void
-  onToggle?: () => void
   className?: string
 }
 
@@ -50,12 +48,7 @@ const schema = z.discriminatedUnion('mode', [signupSchema, loginSchema])
 
 type Schema = z.infer<typeof schema>
 
-export function AuthForm({
-  mode,
-  onSuccess,
-  onToggle,
-  className,
-}: AuthFormProps) {
+export function AuthForm({ mode, className }: AuthFormProps) {
   const router = useRouter()
   const isLogin = mode === 'login'
 
@@ -85,7 +78,8 @@ export function AuthForm({
           return
         }
 
-        onSuccess?.()
+        // onSuccess?.()
+
         router.refresh()
       } else {
         const { name, email, password } = data
@@ -102,7 +96,7 @@ export function AuthForm({
 
         // Auto sign in after signup
         await authClient.signIn.email({ email, password })
-        onSuccess?.()
+        // onSuccess?.()
         router.refresh()
       }
     } catch (err) {
@@ -205,7 +199,12 @@ export function AuthForm({
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input type="password" disabled={isLoading} {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Confirm Password"
+                      disabled={isLoading}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -259,13 +258,12 @@ export function AuthForm({
               {isLogin
                 ? "Don't have an account? "
                 : 'Already have an account? '}
-              <button
-                type="button"
-                onClick={onToggle}
+              <Link
+                href={isLogin ? '/signup' : '/login'}
                 className="hover:text-primary underline underline-offset-4"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
-              </button>
+              </Link>
             </p>
           </div>
         </FieldGroup>

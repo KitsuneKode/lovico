@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { protectedProcedure, publicProcedure } from '@/trpc'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { prisma as db } from '@lovico/store'
 import { z } from 'zod'

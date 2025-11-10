@@ -69,7 +69,7 @@ export function DashboardSidebar({
               href="/"
               className="flex items-center gap-2 text-lg font-bold"
             >
-              <div className="from-primary to-primary/70 flex size-8 items-center justify-center rounded-lg bg-gradient-to-br">
+              <div className="from-primary to-primary/70 flex size-8 items-center justify-center rounded-lg bg-linear-to-br">
                 <span className="text-primary-foreground text-sm">L</span>
               </div>
               <span>Lovico</span>

@@ -3,7 +3,6 @@
 import { motion } from 'motion/react'
 
 import { Sparkles } from 'lucide-react'
-import { PremiumPromptInput } from './premium-prompt-input'
 import { AnimatedGroup } from '@lovico/ui/components/animated-group'
 
 export const AnimatedHero = () => {
@@ -92,7 +91,7 @@ export const AnimatedHero = () => {
             </motion.div>
 
             <div className="mx-auto mt-12 flex items-center justify-center">
-              <PremiumPromptInput />
+              <></>
             </div>
           </AnimatedGroup>
         </div>

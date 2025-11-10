@@ -21,7 +21,7 @@
     "@lovico/eslint-config": "*",
     "@types/bun": "latest",
     "@types/winston": "^2.4.4",
-    "eslint": "^9.39.0"
+    "eslint": "^9.39.1"
   },
   "dependencies": {
     "@lovico/common": "*",

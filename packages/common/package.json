@@ -18,10 +18,10 @@
   "license": "ISC",
   "devDependencies": {
     "@lovico/typescript-config": "*",
-    "@types/bun": "latest",
+    "@types/bun": "1.3.2",
     "@types/winston": "^2.4.4",
     "@lovico/eslint-config": "*",
-    "eslint": "^9.39.0"
+    "eslint": "^9.39.1"
   },
   "dependencies": {
     "zod": "^4.1.11"
