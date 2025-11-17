@@ -115,7 +115,7 @@ export function ChatPanel({ projectId, projectName = 'Untitled Project' }: ChatP
         <div className="space-y-4">
           {/* User Message */}
           <div className="flex flex-col items-end space-y-2">
-            <div className="text-sm text-white text-right max-w-[85%]">
+            <div className="text-sm text-white text-right max-w-[85%] px-4 py-2.5 rounded-xl border border-white/10 bg-transparent">
               create a booking system for appointments with calendar integration
             </div>
             <button className="text-xs text-neutral-500 hover:text-neutral-400 flex items-center gap-1 transition-colors">
@@ -125,8 +125,8 @@ export function ChatPanel({ projectId, projectName = 'Untitled Project' }: ChatP
           </div>
 
           {/* Logo/Divider */}
-          <div className="flex justify-center py-2">
-            <div className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-xs text-white">
+          <div className="flex justify-center py-3">
+            <div className="w-7 h-7 bg-white/10 rounded-md flex items-center justify-center text-xs font-semibold text-white shadow-sm">
               L
             </div>
           </div>
@@ -154,7 +154,7 @@ export function ChatPanel({ projectId, projectName = 'Untitled Project' }: ChatP
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Tell Same what you want"
+            placeholder="Tell Lovico what you want"
             className="resize-none bg-white/5 border-white/10 text-white placeholder:text-neutral-500 pr-4 pb-12 min-h-[80px] text-sm"
             rows={3}
           />
@@ -228,19 +228,19 @@ function ActivityLogItem({ activity }: ActivityLogItemProps) {
   }
 
   return (
-    <div className="group flex items-start gap-3 hover:bg-white/5 rounded-md p-2 -mx-2 transition-colors">
+    <div className="group flex items-start gap-2.5 hover:bg-white/[0.03] rounded-md p-2 -mx-2 transition-colors cursor-pointer">
       <div className="mt-0.5 flex-shrink-0">{getIcon()}</div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-white">{activity.message}</span>
+        <div className="flex items-baseline gap-2 flex-wrap">
+          <span className="text-[13px] text-white">{activity.message}</span>
           {activity.details && (
-            <span className="text-xs text-neutral-400">{activity.details}</span>
+            <span className="text-[11px] text-neutral-500">{activity.details}</span>
           )}
         </div>
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {activity.type !== 'cancelled' && (
-          <ChevronRight className="h-3.5 w-3.5 text-neutral-500" />
+          <ChevronRight className="h-3.5 w-3.5 text-neutral-600" />
         )}
       </div>
     </div>
