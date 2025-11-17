@@ -93,46 +93,46 @@ export function ChatPanel({ projectId, projectName = 'Untitled Project' }: ChatP
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#1a1a1a]">
+    <div className="h-full flex flex-col bg-[#1a1a1a] border-l border-white/[0.08]">
       {/* Header */}
-      <div className="h-14 flex items-center justify-between px-4 border-b border-white/5">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <span className="text-sm font-medium text-white truncate">{projectName}</span>
+      <div className="h-16 flex items-center justify-between px-6 border-b border-white/[0.08]">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <span className="text-base font-semibold text-white truncate">{projectName}</span>
           <ChevronDown className="h-4 w-4 text-neutral-400 flex-shrink-0" />
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-400 hover:text-white">
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200">
             <Plus className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-400 hover:text-white">
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200">
             <Clock className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 px-4 py-4">
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 px-6 py-6">
+        <div className="space-y-6">
           {/* User Message */}
-          <div className="flex flex-col items-end space-y-2">
-            <div className="text-sm text-white text-right max-w-[85%] px-4 py-2.5 rounded-xl border border-white/10 bg-transparent">
+          <div className="flex flex-col items-end space-y-3">
+            <div className="text-base text-white text-right max-w-[90%] px-5 py-3.5 rounded-xl border border-white/[0.12] bg-transparent shadow-sm">
               create a booking system for appointments with calendar integration
             </div>
-            <button className="text-xs text-neutral-500 hover:text-neutral-400 flex items-center gap-1 transition-colors">
-              <RotateCcw className="h-3 w-3" />
+            <button className="text-sm text-neutral-500 hover:text-neutral-400 flex items-center gap-1.5 transition-colors duration-200">
+              <RotateCcw className="h-3.5 w-3.5" />
               Rollback to message
             </button>
           </div>
 
           {/* Logo/Divider */}
-          <div className="flex justify-center py-3">
-            <div className="w-7 h-7 bg-white/10 rounded-md flex items-center justify-center text-xs font-semibold text-white shadow-sm">
+          <div className="flex justify-center py-4">
+            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center text-sm font-bold text-white shadow-lg">
               L
             </div>
           </div>
 
           {/* Activity Log */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             {mockActivities.map((activity) => (
               <ActivityLogItem key={activity.id} activity={activity} />
             ))}
@@ -141,9 +141,9 @@ export function ChatPanel({ projectId, projectName = 'Untitled Project' }: ChatP
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="border-t border-white/5 p-4 space-y-3">
+      <div className="border-t border-white/[0.08] p-6 space-y-4">
         {/* Add Context Button */}
-        <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-400 hover:text-white hover:bg-white/5 rounded-md transition-colors">
+        <button className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-neutral-400 hover:text-white hover:bg-white/[0.08] rounded-lg transition-all duration-200">
           <Paperclip className="h-4 w-4" />
           Add context
         </button>
@@ -155,47 +155,47 @@ export function ChatPanel({ projectId, projectName = 'Untitled Project' }: ChatP
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Tell Lovico what you want"
-            className="resize-none bg-white/5 border-white/10 text-white placeholder:text-neutral-500 pr-4 pb-12 min-h-[80px] text-sm"
+            className="resize-none bg-white/[0.05] border-white/[0.12] text-white placeholder:text-neutral-500 pr-4 pb-14 min-h-[100px] text-base leading-relaxed focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200"
             rows={3}
           />
 
           {/* Bottom Controls */}
-          <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
             {/* Model Selector */}
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 px-2 text-xs bg-white/5 border border-white/10 text-neutral-300 hover:text-white hover:bg-white/10"
+                className="h-8 px-3 text-xs bg-white/[0.08] border border-white/[0.12] text-neutral-300 hover:text-white hover:bg-white/[0.12] transition-all duration-200"
               >
-                <Plus className="h-3 w-3 mr-1" />
+                <Plus className="h-3.5 w-3.5 mr-1.5" />
                 {selectedModel}
               </Button>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-neutral-400 hover:text-white"
+                className="h-8 w-8 text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
               >
-                <Settings className="h-3.5 w-3.5" />
+                <Settings className="h-4 w-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-neutral-400 hover:text-white"
+                className="h-8 w-8 text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
               >
-                <Paperclip className="h-3.5 w-3.5" />
+                <Paperclip className="h-4 w-4" />
               </Button>
               <Button
                 onClick={handleSend}
                 size="icon"
                 disabled={!input.trim()}
-                className="h-7 w-7 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-8 w-8 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20 transition-all duration-200"
               >
-                <Send className="h-3.5 w-3.5" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -213,34 +213,34 @@ function ActivityLogItem({ activity }: ActivityLogItemProps) {
   const getIcon = () => {
     switch (activity.type) {
       case 'started':
-        return <Sparkles className="h-4 w-4 text-purple-400" />
+        return <Sparkles className="h-4.5 w-4.5 text-purple-400" />
       case 'directory':
-        return <Folder className="h-4 w-4 text-blue-400" />
+        return <Folder className="h-4.5 w-4.5 text-blue-400" />
       case 'file':
-        return <FileText className="h-4 w-4 text-yellow-400" />
+        return <FileText className="h-4.5 w-4.5 text-yellow-400" />
       case 'cancelled':
-        return <CheckCircle2 className="h-4 w-4 text-green-400" />
+        return <CheckCircle2 className="h-4.5 w-4.5 text-green-400" />
       case 'success':
-        return <CheckCircle2 className="h-4 w-4 text-green-400" />
+        return <CheckCircle2 className="h-4.5 w-4.5 text-green-400" />
       default:
-        return <FileText className="h-4 w-4 text-neutral-400" />
+        return <FileText className="h-4.5 w-4.5 text-neutral-400" />
     }
   }
 
   return (
-    <div className="group flex items-start gap-2.5 hover:bg-white/[0.03] rounded-md p-2 -mx-2 transition-colors cursor-pointer">
+    <div className="group flex items-start gap-3 hover:bg-white/[0.05] rounded-lg p-3 -mx-3 transition-all duration-200 cursor-pointer">
       <div className="mt-0.5 flex-shrink-0">{getIcon()}</div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-[13px] text-white">{activity.message}</span>
+          <span className="text-sm text-white font-medium">{activity.message}</span>
           {activity.details && (
-            <span className="text-[11px] text-neutral-500">{activity.details}</span>
+            <span className="text-xs text-neutral-500">{activity.details}</span>
           )}
         </div>
       </div>
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         {activity.type !== 'cancelled' && (
-          <ChevronRight className="h-3.5 w-3.5 text-neutral-600" />
+          <ChevronRight className="h-4 w-4 text-neutral-600" />
         )}
       </div>
     </div>

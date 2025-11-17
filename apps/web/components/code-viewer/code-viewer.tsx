@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Check, X } from 'lucide-react'
+import { Copy, Check, X, File } from 'lucide-react'
 import { Button } from '@lovico/ui/components/button'
 import { ScrollArea } from '@lovico/ui/components/scroll-area'
 import { cn } from '@lovico/ui/lib/utils'
@@ -28,26 +28,26 @@ export function CodeViewer({ file, onClose }: CodeViewerProps) {
   return (
     <div className="h-full flex flex-col bg-[#0a0a0a]">
       {/* File Tab */}
-      <div className="h-10 flex items-center justify-between px-4 border-b border-white/5 bg-[#0a0a0a]">
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-neutral-400">{getFileDirectory(file.path)}</span>
-          <span className="text-xs text-white font-medium">{file.name}</span>
+      <div className="h-14 flex items-center justify-between px-6 border-b border-white/[0.08] bg-[#0a0a0a]">
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-neutral-400">{getFileDirectory(file.path)}</span>
+          <span className="text-sm text-white font-semibold">{file.name}</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
             onClick={handleCopy}
-            className="h-7 px-2 text-xs text-neutral-400 hover:text-white"
+            className="h-8 px-3 text-sm text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
           >
             {copied ? (
               <>
-                <Check className="h-3 w-3 mr-1 text-green-400" />
+                <Check className="h-3.5 w-3.5 mr-2 text-green-400" />
                 Copied
               </>
             ) : (
               <>
-                <Copy className="h-3 w-3 mr-1" />
+                <Copy className="h-3.5 w-3.5 mr-2" />
                 Copy
               </>
             )}
@@ -57,9 +57,9 @@ export function CodeViewer({ file, onClose }: CodeViewerProps) {
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="h-7 w-7 text-neutral-400 hover:text-white"
+              className="h-8 w-8 text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-4 w-4" />
             </Button>
           )}
         </div>
@@ -67,16 +67,16 @@ export function CodeViewer({ file, onClose }: CodeViewerProps) {
 
       {/* Code Content */}
       <ScrollArea className="flex-1">
-        <div className="font-mono text-xs">
+        <div className="font-mono text-sm leading-6">
           {lines.map((line, i) => (
             <div
               key={i}
-              className="flex hover:bg-white/5 transition-colors"
+              className="flex hover:bg-white/[0.05] transition-colors duration-150"
             >
-              <span className="inline-block w-12 text-right pr-4 text-neutral-600 select-none flex-shrink-0 border-r border-white/5">
+              <span className="inline-block w-14 text-right pr-5 text-neutral-600 select-none flex-shrink-0 border-r border-white/[0.08] text-xs">
                 {i + 1}
               </span>
-              <pre className="flex-1 text-neutral-200 px-4 py-0 m-0 overflow-visible">
+              <pre className="flex-1 text-neutral-200 px-6 py-0 m-0 overflow-visible">
                 <code className={cn(getLanguageClass(file.language))}>{line || ' '}</code>
               </pre>
             </div>
@@ -117,7 +117,11 @@ export function EmptyCodeViewer({ message = 'Select a file to preview' }: EmptyC
   return (
     <div className="h-full flex items-center justify-center bg-[#0a0a0a]">
       <div className="text-center">
-        <p className="text-sm text-neutral-500">{message}</p>
+        <div className="w-16 h-16 mx-auto mb-4 bg-white/[0.05] rounded-xl flex items-center justify-center">
+          <File className="h-8 w-8 text-neutral-600" />
+        </div>
+        <p className="text-base text-neutral-400 font-medium">{message}</p>
+        <p className="text-sm text-neutral-600 mt-2">Click on a file from the tree to view its contents</p>
       </div>
     </div>
   )

@@ -122,35 +122,35 @@ export default function RootLayout({
 
   return (
     <div className="h-full flex flex-col">
-      {/* Top Bar - same.dev style */}
-      <header className="h-14 flex items-center justify-between px-4 border-b border-white/5 bg-[#0a0a0a]">
-        <div className="flex items-center gap-4">
-          <h1 className="text-sm font-medium text-white">
+      {/* Top Bar - Modern style */}
+      <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.08] bg-[#0a0a0a]">
+        <div className="flex items-center gap-6">
+          <h1 className="text-base font-semibold text-white">
             {project?.name || 'Untitled Project'}
           </h1>
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('preview')}
               className={cn(
-                'px-3 py-1 text-xs rounded transition-colors',
+                'px-4 py-2 text-sm rounded-lg transition-all duration-200',
                 viewMode === 'preview'
-                  ? 'bg-white/10 text-white'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-white/[0.12] text-white font-medium'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/[0.08]'
               )}
             >
-              <Globe className="inline h-3 w-3 mr-1" />
+              <Globe className="inline h-4 w-4 mr-2" />
               Preview
             </button>
             <button
               onClick={() => setViewMode('code')}
               className={cn(
-                'px-3 py-1 text-xs rounded transition-colors',
+                'px-4 py-2 text-sm rounded-lg transition-all duration-200',
                 viewMode === 'code'
-                  ? 'bg-white/10 text-white'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-white/[0.12] text-white font-medium'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/[0.08]'
               )}
             >
-              <Code2 className="inline h-3 w-3 mr-1" />
+              <Code2 className="inline h-4 w-4 mr-2" />
               Code
             </button>
           </div>
@@ -159,27 +159,27 @@ export default function RootLayout({
         <div className="flex items-center gap-2">
           <Button
             size="sm"
-            className="h-7 px-3 text-xs bg-blue-600 hover:bg-blue-700"
+            className="h-9 px-4 text-sm bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-500/20 transition-all duration-200"
           >
-            <Zap className="h-3 w-3 mr-1" />
+            <Zap className="h-4 w-4 mr-2" />
             Pro
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-neutral-400 hover:text-white"
+            className="h-9 w-9 text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-200"
           >
-            <Settings className="h-3.5 w-3.5" />
+            <Settings className="h-4 w-4" />
           </Button>
         </div>
       </header>
 
-      {/* Three-Panel Layout - same.dev style */}
+      {/* Three-Panel Layout - Modern responsive design */}
       <ResizablePanelGroup direction="horizontal" className="flex-1">
         {/* File Tree Panel */}
         {viewMode === 'code' && (
           <>
-            <ResizablePanel defaultSize={18} minSize={15} maxSize={25}>
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={25}>
               <FileTree
                 files={mockFiles}
                 selectedFile={selectedFile}
@@ -187,19 +187,21 @@ export default function RootLayout({
               />
             </ResizablePanel>
 
-            <ResizableHandle className="w-px bg-white/5" />
+            <ResizableHandle className="w-px bg-white/[0.08] hover:bg-indigo-500/50 transition-colors duration-200" />
           </>
         )}
 
         {/* Preview/Code Panel */}
-        <ResizablePanel defaultSize={viewMode === 'code' ? 52 : 70} minSize={35}>
+        <ResizablePanel defaultSize={viewMode === 'code' ? 48 : 65} minSize={35}>
           {viewMode === 'preview' ? (
             <div className="h-full flex items-center justify-center bg-white">
-              <div className="text-center p-8">
-                <Globe className="h-12 w-12 mx-auto text-neutral-400 mb-4" />
-                <p className="text-sm text-neutral-600">Preview coming soon</p>
-                <p className="text-xs text-neutral-400 mt-2">
-                  Generated website will appear here
+              <div className="text-center p-12">
+                <div className="w-20 h-20 mx-auto mb-6 bg-neutral-100 rounded-2xl flex items-center justify-center">
+                  <Globe className="h-10 w-10 text-neutral-400" />
+                </div>
+                <p className="text-base text-neutral-700 font-semibold">Preview coming soon</p>
+                <p className="text-sm text-neutral-500 mt-2 max-w-xs mx-auto">
+                  Your generated website will appear here
                 </p>
               </div>
             </div>
@@ -210,10 +212,10 @@ export default function RootLayout({
           )}
         </ResizablePanel>
 
-        <ResizableHandle className="w-px bg-white/5" />
+        <ResizableHandle className="w-px bg-white/[0.08] hover:bg-indigo-500/50 transition-colors duration-200" />
 
         {/* Chat Panel */}
-        <ResizablePanel defaultSize={30} minSize={25} maxSize={40}>
+        <ResizablePanel defaultSize={32} minSize={28} maxSize={40}>
           <ChatPanel projectId={projectId} projectName={project?.name} />
         </ResizablePanel>
       </ResizablePanelGroup>

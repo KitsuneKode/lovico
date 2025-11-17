@@ -33,23 +33,23 @@ export function FileTree({ files, selectedFile, onFileSelect }: FileTreeProps) {
     : files
 
   return (
-    <div className="h-full flex flex-col bg-[#1a1a1a] border-r border-white/5">
+    <div className="h-full flex flex-col bg-[#1a1a1a] border-r border-white/[0.08]">
       {/* Search Bar */}
-      <div className="p-3 border-b border-white/5">
+      <div className="p-4 border-b border-white/[0.08]">
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-neutral-500" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-500" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search"
-            className="pl-8 bg-white/5 border-white/10 text-white placeholder:text-neutral-500 h-8 text-xs focus-visible:ring-1 focus-visible:ring-white/20"
+            placeholder="Search files..."
+            className="pl-9 bg-white/[0.05] border-white/[0.12] text-white placeholder:text-neutral-500 h-9 text-sm focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:border-indigo-500 transition-all duration-200"
           />
         </div>
       </div>
 
       {/* File List */}
       <ScrollArea className="flex-1">
-        <div className="p-2">
+        <div className="p-3">
           {filteredFiles.map((node) => (
             <FileTreeNode
               key={node.id}
@@ -95,30 +95,30 @@ function FileTreeNode({
   toggleExpand,
 }: FileTreeNodeProps) {
   const isFolder = node.type === 'directory'
-  const paddingLeft = `${depth * 12 + 8}px`
+  const paddingLeft = `${depth * 16 + 12}px`
 
   return (
     <>
       <button
         onClick={isFolder ? onToggle : onSelect}
         className={cn(
-          'w-full flex items-center gap-2 px-2 py-1 rounded text-xs transition-colors',
-          isSelected && 'bg-white/10 text-white',
-          !isSelected && 'text-neutral-300 hover:bg-white/5 hover:text-white'
+          'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-200',
+          isSelected && 'bg-white/[0.12] text-white font-medium',
+          !isSelected && 'text-neutral-300 hover:bg-white/[0.08] hover:text-white'
         )}
         style={{ paddingLeft }}
       >
         {isFolder ? (
           <>
             {isExpanded ? (
-              <ChevronDown className="h-3 w-3 text-neutral-400 flex-shrink-0" />
+              <ChevronDown className="h-3.5 w-3.5 text-neutral-400 flex-shrink-0" />
             ) : (
-              <ChevronRight className="h-3 w-3 text-neutral-400 flex-shrink-0" />
+              <ChevronRight className="h-3.5 w-3.5 text-neutral-400 flex-shrink-0" />
             )}
-            <Folder className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
+            <Folder className="h-4 w-4 text-blue-400 flex-shrink-0" />
           </>
         ) : (
-          <div className="w-3 flex-shrink-0" /> // Spacer for alignment
+          <div className="w-3.5 flex-shrink-0" /> // Spacer for alignment
         )}
 
         {!isFolder && <FileIcon name={node.name} />}
@@ -169,5 +169,5 @@ function FileIcon({ name }: { name: string }) {
 
   const config = iconConfig[ext || ''] || { color: 'text-neutral-400' }
 
-  return <File className={cn('h-3.5 w-3.5 flex-shrink-0', config.color)} />
+  return <File className={cn('h-4 w-4 flex-shrink-0', config.color)} />
 }
